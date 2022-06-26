@@ -67,8 +67,7 @@ while True:
             if select == '1': # 게임 시작
                 pass
 
-            elif select == '2': # 랭킹 확인
-                highscore()
+            elif select == '2': highscore()  # 랭킹 확인
 
             elif select == '3': print_help() # 게임 설명
 
