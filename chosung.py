@@ -2,18 +2,19 @@
 DIR_WORD = './word/'
 DIR_NAME = './name/'
 
+import time
+import numpy as np                  # 넘파이 np로 쓸거에요 우리
+import pandas as pd                 # 판다스는 pd로 쓸거에요 우리
+import openpyxl
 import os
-if not os.path.exists(DIR_WORD):    # dict 폴더 존재 여부 체크 없으면 만들기
+
+if not os.path.exists(DIR_WORD):    # word 폴더 존재 여부 체크 없으면 만들기
     os.makedirs(DIR_WORD)
 
 if not os.path.exists(DIR_NAME):    # name 폴더 존재 여부 체크 없으면 만들기
     os.makedirs(DIR_NAME)
 
 nameList = os.listdir(DIR_NAME)     # name 폴더 안 파일들의 이름들을 리스트로 만들기
-
-import time
-
-import numpy as np                  # 넘파이 np로 쓸거에요 우리
 
 
 # 함수 세팅 ------------------------
@@ -36,9 +37,11 @@ def print_main():      # 메인 화면
 def print_help():       # 게임 설명
     print('애옹')
 
-def show_rank():        # 랭킹 확인
-    print('순위 닉네임 점수 시간')
-    print('애옹')
+def highscore():        # 랭킹 확인
+    highscore = pd.read_excel('./rank.xlsx', engine='openpyxl', index_col='순위', usecols=[0, 1, 2, 3])
+    # rank.xls 열기, 시간까지만 보여주기
+    highscore = highscore.loc[1:10]     # 10등까지만 보여주기
+    print(highscore)
 
 def save_result(name):      # 게임 결과 저장
     name = name.replace(" ", "")    # 이름의 공백 제거
@@ -48,14 +51,6 @@ def save_result(name):      # 게임 결과 저장
     with open(filename, mode = 'a', encoding = 'utf-8') as file:
         file.write(f'{score} {time.strftime("%y/%m/%d %H:%M:%S", rank_time)} {time.time()}\n')
         # 점수 저장, 보기 좋게 시간 표시 양식을 바꿔서 저장, 하나는 시간 비교용으로 원본값 저장
-
-
-
-score = 20
-
-save_result("오우영")
-
-
 
 # 게임 구현 ------------------------
 print('게임이 시작되었습니다.')
@@ -73,7 +68,7 @@ while True:
                 pass
 
             elif select == '2': # 랭킹 확인
-                show_rank()
+                highscore()
 
             elif select == '3': print_help() # 게임 설명
 
