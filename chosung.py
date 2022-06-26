@@ -1,10 +1,10 @@
 # 전역 변수 및 상수 --------------------------
-DIR_DICT = './dict/'
+DIR_WORD = './word/'
 DIR_NAME = './name/'
 
 import os
-if not os.path.exists(DIR_DICT):    # dict 폴더 존재 여부 체크 없으면 만들기
-    os.makedirs(DIR_DICT)
+if not os.path.exists(DIR_WORD):    # dict 폴더 존재 여부 체크 없으면 만들기
+    os.makedirs(DIR_WORD)
 
 if not os.path.exists(DIR_NAME):    # name 폴더 존재 여부 체크 없으면 만들기
     os.makedirs(DIR_NAME)
