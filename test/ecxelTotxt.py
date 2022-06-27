@@ -19,7 +19,7 @@ def ETT(excel):
     col=row[((row['구성 단위']=='단어') & (row['고유어 여부']=='고유어')) | ((row['구성 단위']=='단어') & (row['고유어 여부']=='한자어'))]
     col=col.rename(columns={'어휘':'가'})
     txt=col.iloc[:,:1]
-    txt.to_csv(DIR_WORD+'ETT/'+excel[:-5]+'.txt', index=0)
+    txt.to_csv(DIR_WORD+'ETT/'+excel[:-5]+'.txt',index=0)
 
 # 한글 제외한 모든 문자 제거
 def clean_txt(txt_file):
