@@ -8,9 +8,6 @@ import os
 DIR_WORD = '../word/'
 DIR_PLAYER = '../player/'
 
-if not os.path.exists(DIR_WORD):    # word 폴더 존재 여부 체크 없으면 만들기
-    os.makedirs(DIR_WORD)
-
 if not os.path.exists(DIR_PLAYER):    # player 폴더 존재 여부 체크 없으면 만들기
     os.makedirs(DIR_PLAYER)
 
