@@ -1,12 +1,7 @@
 import time
-import numpy as np
 import pandas as pd
-import openpyxl
 import os
 import random
-
-
-DIR_WORD = '../word/'
 
 
 class chsgame:
