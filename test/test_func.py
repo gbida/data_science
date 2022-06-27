@@ -76,7 +76,7 @@ def save_result(player): # 게임 종료 후 결과 저장
 
     data['rank'] = factorized  #새로운 순위를 'rank'행에 저장
     data = data.sort_values(by=['rank']) # 'rank'에 따라 정렬
-    data.index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]    # 다시 1~10위 부여하기
+    data.index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]    # 다시 1~11위 부여하기
     data = data.drop('rank', axis=1)    # 'rank'행 삭제
     data = data.drop(11)                # 11위 삭제
     data.to_excel(DIR_EXCEL)       # rank.xlsx에 덮어쓰기
