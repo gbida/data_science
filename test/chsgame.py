@@ -1,5 +1,4 @@
 import os
-import time
 import random
 
 
@@ -23,15 +22,15 @@ class chsgame:
     ]
 
     # 초성 분리
-    def getchos(word):
+    def getchos(self, word: str) -> str:
         result = ''
         for w in word:
             result += chr(((ord(w) - 44032) // 588) + 4352)
         return result
 
     # 게임 시작
-    def startgame(player):
-        point = 0
+    def startgame(self, player: str) -> tuple:
+        score = 0
         player_say = []
         i = 0
         # 초성 랜덤 제시
@@ -42,18 +41,9 @@ class chsgame:
                 for line in wf.readlines():
                     testfile.append(line.replace('\n', ''))
             correct = random.choice(testfile)
-            print(chsgame.getchos(correct))
-            start = time.time()
-            # player 입력
-            player_say.append(input('정답은?'))
-            end = time.time()
-            while (end-start) < 30:
-                if player_say[i] == correct:
-                    if player_say[i] not in player_say:
-                        point += 1
-                        i += 1
-                        print()
-                else: break
-        else:
-            print('time session end')
-            exit(0)
+            # 정답이면 score+1
+            if player_say[i] == correct:
+                if player_say[i] not in player_say:
+                    score += 1
+                    i += 1
+                    return (correct, score)
