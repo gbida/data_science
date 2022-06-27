@@ -38,7 +38,7 @@ def print_help():       # 게임 설명
     print('애옹')
 
 def highscore():        # 랭킹 확인
-    highscore = pd.read_excel('./rank.xlsx', engine='openpyxl', index_col=0, usecols=[0, 1, 2, 3])
+    highscore = pd.read_excel('../rank.xlsx', engine='openpyxl', index_col=0, usecols=[0, 1, 2, 3])
     # rank.xlsx 열기, 시간까지만 보여주기
     highscore = highscore.loc[1:10]     # 10등까지만 보여주기
     print(highscore)
