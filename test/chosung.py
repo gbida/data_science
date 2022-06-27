@@ -42,7 +42,6 @@ def highscore():        # 랭킹 확인
 
 def save_result(player): # 게임 종료 후 결과 저장
     data = pd.read_excel('../rank.xlsx', engine='openpyxl', index_col=0) # 랭킹 엑셀 읽기
-    print(data)
     player = player.replace(' ','') # 공백 제거
     rank_time = time.localtime()    # 현재 시간 저장
     data.loc[11] = [player, point, time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
