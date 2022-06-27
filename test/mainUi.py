@@ -1,14 +1,20 @@
 from tkinter import *
 import tkinter.font
 import tkinter.ttk
+
+
 # 메인 UI
 w = Tk()
 w.title("초성 Quiz!")
 w.geometry("400x297")
+
+
 # 메인 이미지 넣기
 photo = PhotoImage(file="../image/example2.png")
 pLabel = Label(w, image=photo)
 pLabel.pack(expand=1, anchor=N)
+
+
 # 랭킹페이지 새창 생성
 def create_rank_page():
     newWindow = Toplevel(w)
@@ -24,11 +30,18 @@ def create_rank_page():
     time.place(x=200, y=10)
     listbox = Listbox(newWindow, width=32, height=15)
     listbox.place(x=10, y=40)
+
+
 # 게임 설명 페이지
 def create_how_page():
     newWindow = Toplevel(w)
-    newWindow.title('게임설명')
-    newWindow.geometry("250x297")
+    newWindow.title('게임 설명')
+    newWindow.geometry("500x500")
+    page = PhotoImage(file='../image/guide.png')
+    page_label = tkinter.Label(newWindow, image=page)
+    page_label.place(x=0, y=0)
+
+
 # 게임 페이지 새창 생성
 def create_game_page():
     newWindow = Toplevel(w)
@@ -60,16 +73,27 @@ def create_game_page():
     count = Label(newWindow, text='정답수 : ', width=12, font=font2, justify='center')
     round.place(x=85, y=10)
     count.place(x=85, y=40)
+
+
 # 랭킹보기 버튼
 rank_btn = Button(text='랭킹보기', height=3, width=17, command=create_rank_page)
 rank_btn.place(x=1, y=240)
+
+
 # 퀴즈풀러 가기 버튼
 quiz_btn = Button(text='퀴즈풀러 가기', height=3, width=17, command=create_game_page)
 quiz_btn.place(x=135, y=240)
-# 종료 버튼
+
+
+# 종료 기능 선언
 def close_window():
     w.destroy()
+
+
+# 종료 버튼 구현
 exit_btn = Button(text='종   료', height=3, width=17, command=close_window)
 exit_btn.place(x=270, y=240)
 
+
+# 메인UI 구동
 w.mainloop()
