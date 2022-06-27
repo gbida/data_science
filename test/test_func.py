@@ -3,60 +3,42 @@ import pandas as pd
 import os
 import random
 
+# 초성 분리
+def getchos(self, word: str) -> str:
+    result = ''
+    for w in word:
+        result += chr(((ord(w) - 44032) // 588) + 4352)
+    return result
 
-class chsgame:
-    # 초성, 중성, 종성 리스트
-    chos = [
-        'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ',
-        'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ',
-        'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
-    ]
-    jungs = [
-        'ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ',
-        'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ',
-        'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'
-    ]
-    jongs = [
-        ' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ',
-        'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ',
-        'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ',
-        'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
-    ]
+# 게임 시작
+def startgame(self, player: str) -> tuple:
+    global score
+    score = 0
+    player_say = []
+    i = 0
+    # 초성 랜덤 제시
+    if player:
+        testfile = []
+        wordfile = random.choice(os.listdir('../word/'))
+        with open(wordfile, mode='r', encoding='utf-8') as wf:
+            for line in wf.readlines():
+                testfile.append(line.replace('\n', ''))
+        correct = random.choice(testfile)
+        # 정답이면 score+1
+        if player_say[i] == correct:
+            if player_say[i] not in player_say:
+                score += 1
+                i += 1
+                return (correct, score)
 
-    # 초성 분리
-    def getchos(self, word: str) -> str:
-        result = ''
-        for w in word:
-            result += chr(((ord(w) - 44032) // 588) + 4352)
-        return result
-
-    # 게임 시작
-    def startgame(self, player: str) -> tuple:
-        global score
-        score = 0
-        player_say = []
-        i = 0
-        # 초성 랜덤 제시
-        if player:
-            testfile = []
-            wordfile = random.choice(os.listdir('../word/'))
-            with open(wordfile, mode='r', encoding='utf-8') as wf:
-                for line in wf.readlines():
-                    testfile.append(line.replace('\n', ''))
-            correct = random.choice(testfile)
-            # 정답이면 score+1
-            if player_say[i] == correct:
-                if player_say[i] not in player_say:
-                    score += 1
-                    i += 1
-                    return (correct, score)
-
-def highscore():        # 랭킹 확인
+# 랭킹 확인
+def highscore():
     highscore = pd.read_excel('../rank.xlsx', engine='openpyxl', index_col=0, usecols=[0, 1, 2, 3])
     # rank.xlsx 열기, 시간까지만 보여주기
     return highscore.loc[1:10]     # 10등까지만 보여주기
 
-def save_result(player): # 게임 종료 후 결과 저장
+# 게임 종료 후 결과 저장
+def save_result(player):
     data = pd.read_excel('../rank.xlsx', engine='openpyxl', index_col=0) # 랭킹 엑셀 읽기
     player = player.replace(' ','') # 공백 제거
     rank_time = time.localtime()    # 현재 시간 저장
@@ -69,7 +51,8 @@ def save_result(player): # 게임 종료 후 결과 저장
     f, i = pd.factorize(tups)
     factorized = pd.Series(f+1, tups.index)
 
-    data['rank'] = factorized  #새로운 순위를 'rank'행에 저장
+    # 새로운 순위를 'rank'행에 저장
+    data['rank'] = factorized
     data = data.sort_values(by=['rank']) # 'rank'에 따라 정렬
     data.index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]    # 다시 1~10위 부여하기
     data = data.drop('rank', axis=1)    # 'rank'행 삭제
