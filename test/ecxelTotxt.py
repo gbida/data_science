@@ -6,8 +6,8 @@ import tqdm
 
 # 폴더
 ori='../dic/'                    # 처리할 엑셀파일 위치
-txt_dir='../word/'               # 최종 txt 파일 저장 폴더
-if not os.path.exists(txt_dir): os.mkdir(txt_dir)
+DIR_WORD='../word/'              # 최종 txt 파일 저장 폴더
+if not os.path.exists(DIR_WORD): os.mkdir(DIR_WORD)
 
 # 함수 정의
 
@@ -68,7 +68,7 @@ def chosung(txt_file):
                     chosung1+=chosungList[code]
                 with open(DIR_WORD+chosung1+'.txt',mode='a',encoding='utf-8') as txt2:
                     txt2.write(word+'\n')
-
+                    
 # 폴더 내 파일 개수 반환
 def count_file(dir_path):
     dir_count= os.listdir(dir_path)
