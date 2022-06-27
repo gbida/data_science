@@ -7,7 +7,7 @@ import random
 
 
 DIR_WORD = '../word/'
-
+DIR_EXCEL = '../rank.xlsx'
 
 class chsgame:
     # 초성, 중성, 종성 리스트
@@ -57,12 +57,12 @@ class chsgame:
                     return (correct, score)
 
 def highscore():        # 랭킹 확인
-    highscore = pd.read_excel('../rank.xlsx', engine='openpyxl', index_col=0, usecols=[0, 1, 2, 3])
+    highscore = pd.read_excel(DIR_EXCEL, engine='openpyxl', index_col=0, usecols=[0, 1, 2, 3])
     # rank.xlsx 열기, 시간까지만 보여주기
     return highscore.loc[1:10]     # 10등까지만 보여주기
 
 def save_result(player): # 게임 종료 후 결과 저장
-    data = pd.read_excel('../rank.xlsx', engine='openpyxl', index_col=0) # 랭킹 엑셀 읽기
+    data = pd.read_excel(DIR_EXCEL, engine='openpyxl', index_col=0) # 랭킹 엑셀 읽기
     player = player.replace(' ','') # 공백 제거
     rank_time = time.localtime()    # 현재 시간 저장
     data.loc[11] = [player, score, time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
@@ -79,4 +79,4 @@ def save_result(player): # 게임 종료 후 결과 저장
     data.index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]    # 다시 1~10위 부여하기
     data = data.drop('rank', axis=1)    # 'rank'행 삭제
     data = data.drop(11)                # 11위 삭제
-    data.to_excel('../rank.xlsx')       # rank.xlsx에 덮어쓰기
+    data.to_excel(DIR_EXCEL)       # rank.xlsx에 덮어쓰기
