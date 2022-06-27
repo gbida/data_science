@@ -5,8 +5,8 @@ import re
 import tqdm
 
 # 폴더
-ori='./dic/'                    # 처리할 엑셀파일 위치
-DIR_WORD='./word/'              # 최종 txt 파일 저장 폴더
+ori='../dic/'                    # 처리할 엑셀파일 위치
+DIR_WORD='../word/'              # 최종 txt 파일 저장 폴더
 if not os.path.exists(DIR_WORD): os.mkdir(DIR_WORD)
 
 # 함수 정의
