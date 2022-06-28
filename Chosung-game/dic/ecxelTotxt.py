@@ -5,7 +5,7 @@ import re
 import tqdm
 
 # 폴더
-DIR_WORD = './word/'   # 최종 txt 파일 저장 폴더
+DIR_WORD = '../dic/word/'   # 최종 txt 파일 저장 폴더
 if not os.path.exists(DIR_WORD): os.mkdir(DIR_WORD)
 
 # 함수 정의
