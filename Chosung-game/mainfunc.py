@@ -62,7 +62,7 @@ def save_result(player):
         player=player.replace(' ', '')  # 공백 제거
         playtime = end - start
         rank_time=time.localtime()  # 현재 시간 저장
-        data.loc[11]=[player, playtime, time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
+        data.loc[11]=[player, round(playtime, 2), time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
         # 새로운 게임 결과를 11등 위치에 저장
 
         cols=['기록', '시간값']
