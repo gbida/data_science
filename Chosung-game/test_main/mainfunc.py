@@ -69,18 +69,22 @@ def save_result(player):
 
 
 if __name__ == '__main__':
-    try:
-        while True:
-            print(givechosung()[:2])
-            player_say = (input('정답은?').replace(' ', ''))
-            if isduplicate(player_say):
-                with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
-                    if player_say in f.read():
-                        count += 1
-                        answerlist.append(player_say)
-                        print('정답')
-                    else:
-                        print('오답')
-                        break
-    except Exception as e:
-        print(e)
+    limit = 0
+    name = input('player name ')
+    start = time.localtime(time.time()).tm_sec
+    while limit < 5:
+        print(givechosung()[:2])
+        player_say = (input('정답은? ').replace(' ', ''))
+        if isduplicate(player_say):
+            with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
+                if player_say in f.read():
+                    count += 1
+                    limit += 1
+                    answerlist.append(player_say)
+                    print('정답')
+                else:
+                    print('오답')
+                    break
+    end = time.localtime(time.time()).tm_sec
+    playtime = end-start
+    print(f'player {name} playtime {playtime}sec')
