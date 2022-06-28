@@ -1,3 +1,9 @@
+# 모듈
+import pandas
+import os
+import re
+import tqdm
+
 # 폴더
 DIR_WORD_PATH = '../dic/word/'   # 최종 txt 파일 저장 폴더
 if not os.path.exists(DIR_WORD_PATH): os.mkdir(DIR_WORD_PATH)
