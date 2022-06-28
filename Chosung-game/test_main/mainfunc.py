@@ -68,21 +68,3 @@ def save_result(player):
         data = data.drop('rank', axis=1)  # 'rank'행 삭제
         data = data.drop(11)  # 11위 삭제
         data.to_excel(DIRC_EXCEL)  # rank.xlsx에 덮어쓰기
-
-
-if __name__ == '__main__':
-    name=input('player name ')
-    while limit < 5:
-        print(givechosung()[:2])
-        player_say=(input('정답은? ').replace(' ', ''))
-        if isduplicate(player_say):
-            with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
-                if player_say in f.read():
-                    count+=1
-                    limit+=1
-                    answerlist.append(player_say)
-                    print('정답')
-                else:
-                    print('오답')
-                    break
-    save_result(name)
