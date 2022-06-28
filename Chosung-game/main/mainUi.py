@@ -5,9 +5,10 @@ import tkinter.ttk as ttk
 from tkinter import *
 from tkinter import simpledialog
 import pandas
-import time
+import time as t
+import mainfunc
 
-
+i = 0
 # class로 chosungApp 기본 프레임 묶어주기
 class chosungApp(Tk):
     def __init__(w):
@@ -80,7 +81,7 @@ class chosungApp(Tk):
         w.working_frame = ttk.Frame(w, width=500, height=500, relief='groove')
         w.working_frame.pack_propagate(False)
 
-        def timer():
+        def nickname():
             how_btn['state'] = 'disabled'
             start_btn['state'] = 'disabled'
             # 닉네임 입력받는 부분, name으로 저장된다.
@@ -92,26 +93,58 @@ class chosungApp(Tk):
                 else:
                     tkinter.messagebox.showwarning('', '닉네임을 입력하세요')
                     a = 0
-            # 타이머 초과 시 게임종료 부분, 게임 진짜 실행 부분 코드구현 필요.
-            j = 0
-            for i in range(300):
-                j += 1
+            # 시작시간 수정
+            time = '시작시간 : ' + t.strftime('%H:%M:%S') + '(시:분:초)'
+            start_time = Label(w.working_frame, text=time, font=font, width=25)
+            start_time.place(x=65, y=35)
+            chosung_display()
+            # 시작시간 표시 후 곧바로 게임 시작
+        # 초성제시 -> 정답인풋 -> txt파일의 데이터와 비교 -> (정답)프로그래스바+=1, 다음초성 제시 -> (정답5개누적) 종료시간 표시 -> 축하합니다! 걸린시간 ' ' 출력 -> 랭킹 제
+        #                                           -> (오답)메인메뉴로 이동 -> game over, '좀 더 공부하세요' 출력
+        # 초성제시
+
+        def chosung_display():
+            chosung = mainfunc.givechosung()
+            chosung1 = chosung[:1]
+            chosung2 = chosung[1:2]
+            chosung1 = Label(w.working_frame, text=chosung1, font=tkinter.font.Font(size=59, weight='bold'), height=1, width=2, anchor='center', relief='ridge', borderwidth=5)
+            chosung1.place(x=140, y=130)
+            chosung2 = Label(w.working_frame, text=chosung2, font=tkinter.font.Font(size=59, weight='bold'), height=1, width=2, anchor='center', relief='ridge', borderwidth=5)
+            chosung2.place(x=260, y=130)
+        # 정답인풋
+
+        def chosung_input2(event):
+            result = chosung_input.get()
+            chosung_input.delete(0, "end")
+            if mainfunc.iscorrect(result) == True:
+                chosung_display()
+                global i
+                i += 1
                 curr_progress.set(i)
                 progress_bar.update()
-                time.sleep(0.01)
-                if j == 300:
-                    font = tkinter.font.Font(size=40, weight='bold')
-                    timeout = Label(w.working_frame, font=font, text='시간초과!', fg='red')
-                    chosung_input['state'] = 'disabled'
-                    timeout.place(x=140, y=150)
-                    # 타임아웃이 되면 정답수, 닉네임, 기록 세운 시간 저장할 것.
-                    break
+                if i == 5:
+                    tkinter.messagebox.showwarning('', 'GAME CLEAR   축하합니다!')
+                    i = 0
+                    curr_progress.set(i)
+                    progress_bar.update()
+                    w.window1()
+                    # 데이터 저장
+            else:
+                tkinter.messagebox.showwarning('', 'GAME OVER   좀 더 공부하세요!')
+                i = 0
+                curr_progress.set(i)
+                progress_bar.update()
+                w.window1()
+            # if True 이면 다시 초성 제시 후 비교
+            # i += 한다.
+            # if i == 5면 게임 클리어
+            # False 이면 메인메뉴
 
         # 버튼삽입
         how_btn = Button(w.working_frame, text='게임설명', height=3, width=17, command=w.window4)
         how_btn.place(x=30, y=400)
         # 게임시작을 누르면 timer 함수가 실행된다.
-        start_btn = Button(w.working_frame, text='게임시작!', height=3, width=17, command=timer)
+        start_btn = Button(w.working_frame, text='게임시작!', height=3, width=17, command=nickname)
         start_btn.place(x=185, y=400)
         exit_btn2 = Button(w.working_frame, text='종   료', height=3, width=17, command=w.destroy)
         exit_btn2.place(x=340, y=400)
@@ -120,18 +153,23 @@ class chosungApp(Tk):
         chosung1.place(x=150, y=130)
         chosung2 = Label(w.working_frame, height=6, width=12, anchor='center', relief='ridge', borderwidth=5)
         chosung2.place(x=270, y=130)
-        # 남은시간 타이머 표시
+        # 남은 단어 시각화
         curr_progress = tkinter.DoubleVar()
-        progress_bar = tkinter.ttk.Progressbar(w.working_frame, length=300, maximum=300, variable=curr_progress)
+        progress_bar = tkinter.ttk.Progressbar(w.working_frame, length=300, maximum=5, variable=curr_progress)
         progress_bar.place(x=107, y=255)
         # 정답 입력 부분
         font = tkinter.font.Font(size=40)
         chosung_input = Entry(w.working_frame, font=font, width=10, justify='center')
         chosung_input.place(x=105, y=300)
+
+
+        chosung_input.bind("<Return>", chosung_input2)
         # 라운드 수 표시
-        font = tkinter.font.Font(size=35, weight='bold')
-        count = Label(w.working_frame, text='정답수 : ', font=font, width=12, justify='center')
-        count.place(x=45, y=40)
+        font = tkinter.font.Font(size=18, weight='bold')
+        start_time = Label(w.working_frame, text='시작시간 : --:--:--(시:분:초)', font=font, width=25)
+        start_time.place(x=65, y=35)
+        end_time = Label(w.working_frame, text='종료시간 : --:--:--(시:분:초)', font=font, width=25)
+        end_time.place(x=65, y=75)
         w.working_frame.pack(side='top', pady=(0, 0))
 
     def window4(w):
