@@ -4,7 +4,7 @@ import os
 import random
 import openpyxl
 
-DIR_WORD_PATH = '../dic/word/'
+DIR_WORD_PATH = '../word/'
 DIRC_EXCEL = './rank.xlsx'
 
 answerlist=[]  # 플레이어 정답 저장
@@ -12,12 +12,15 @@ select=''  # 초성 파일
 
 # 초성 제시
 def givechosung():
+    """Returns a chosung txt file name as a string"""
     global select
     select=random.choice(os.listdir(DIR_WORD_PATH))
     return select
 
 # 플레이어 입력값이 select에 있는 단어인지 확인
 def iscorrect(player_say):
+    """Returns true if player's answer in a answer list, otherwise false"""
+    global answerlist
     with open(DIR_WORD_PATH+select, encoding='utf-8') as f:
         if player_say in f.read():
             answerlist.append(player_say)
@@ -26,6 +29,7 @@ def iscorrect(player_say):
 
 # 2번째 입력부터 저장된 정답 리스트에 있는 단어인지 확인
 def isduplicate(player_say):
+    """Returns true if not player's answer is not existing in a answer list"""
     if not answerlist:
         return iscorrect(player_say)
     else:
@@ -50,6 +54,7 @@ def save_result(player, end, start):
                            '시간값':{0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}})
         filename='rank.xlsx'
         df.to_excel(filename)
+
         # 만든 빈 양식에 플레이 데이터 기록
         data=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0)  # 랭킹 엑셀 읽기
         player=player.replace(' ', '')  # 공백 제거
