@@ -8,18 +8,17 @@ import random
 DIR_WORD_PATH = '../dic/word/'
 DIRC_EXCEL = './rank.xlsx'
 
-count = 1
+count = 0
 answerlist = []
 
-
 # 플레이어한테 초성 제시
-def givechosung() -> str:
-    """Return two letters chosung as a string"""
-    randomfile = random.choice(os.listdir(DIR_WORD_PATH))  # ㄷㅇ.txt
+def givechosung():
+    """Return txt file name as a string"""
+    randomfile = random.choice(os.listdir(DIR_WORD_PATH))
     return randomfile
 
 # 정답을 맞춘 단어 필터링
-def isduplicate(player_say: str) -> bool:
+def isduplicate(player_say: str):
     """Return True if player's answer is not it answerlist, otherwise False"""
     if not answerlist: return True
     else:
@@ -42,13 +41,13 @@ def save_result(player):
                            '시간':{0:"-", 1:"-", 2:"-", 3:"-", 4:"-", 5:"-", 6:"-", 7:"-", 8:"-", 9:"-"},
                            '시간값':{0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}})
         filename = 'rank.xlsx'
-        df.to_excel(filename) # rank.xlsx 생성
+        df.to_excel(filename)  # rank.xlsx 생성
 
     else:
         data=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0)  # 랭킹 엑셀 읽기
         player=player.replace(' ', '')  # 공백 제거
         rank_time=time.localtime()  # 현재 시간 저장
-        data.loc[11]=[player, player.getscore(), time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
+        data.loc[11]=[player, count, time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
         print(data)
 
         # 새로운 게임 결과를 11등 위치에 저장
@@ -70,18 +69,13 @@ def save_result(player):
 
 
 if __name__ == '__main__':
-
     try:
         while True:
-            # 초성 제시
             print(givechosung()[:2])
-            # 플레이어 정답 입력
             player_say = (input('정답은?').replace(' ', ''))
-            # 정답을 맞춘 단어 필터링
             if isduplicate(player_say):
-                # 플레이어 입력 단어가 단어 파일에 있으면 count+1, answerlist에 정답 추가
                 with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
-                    if player_say+'\n' in f.readlines():
+                    if player_say in f.read():
                         count += 1
                         answerlist.append(player_say)
                         print('정답')
