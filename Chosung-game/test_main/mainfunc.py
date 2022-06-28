@@ -22,13 +22,24 @@ def givechosung():
 
 
 # 저장된 정답 리스트에 있는 단어인지 확인
-def isduplicate(player_say):
+def isduplicate():
     """Return True if player's answer is not it answerlist, otherwise False"""
-    if not answerlist: return True
+    if not answerlist:
+        return iscorrect(player_say)
     else:
-        for answer in answerlist:
-            if player_say is not answer: return True
+        if iscorrect(player_say):
+            for answer in answerlist:
+                if player_say is not answer: return True
             else: return False
+
+
+# 플레이어가 입력한 단어가 사전파일에 있는 단어인지 확인
+def iscorrect(player_say):
+    with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
+        if player_say in f.read():
+            answerlist.append(player_say)
+            return True
+        else: False
 
 
 # 랭킹 확인
@@ -68,3 +79,21 @@ def save_result(player):
         data = data.drop('rank', axis=1)  # 'rank'행 삭제
         data = data.drop(11)  # 11위 삭제
         data.to_excel(DIRC_EXCEL)  # rank.xlsx에 덮어쓰기
+
+
+# if __name__ == '__main__':
+#     name=input('player name ')
+#     while limit < 5:
+#         print(givechosung()[:2])
+#         player_say=(input('정답은? ').replace(' ', ''))
+#         if isduplicate(player_say):
+#             with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
+#                 if player_say in f.read():
+#                     count+=1
+#                     limit+=1
+#                     answerlist.append(player_say)
+#                     print('정답')
+#                 else:
+#                     print('오답')
+#                     break
+#     save_result(name)
