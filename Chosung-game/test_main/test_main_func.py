@@ -84,7 +84,7 @@ def save_result(player):
     data=pd.read_excel(FILE_EXCEL_PATH, engine='openpyxl', index_col=0)  # 랭킹 엑셀 읽기
     player=player.replace(' ', '')  # 공백 제거
     rank_time=time.localtime()  # 현재 시간 저장
-    data.loc[11]=[player, score, time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
+    data.loc[11]=[player, setplayer(name).getscore(), time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
 
     # 새로운 게임 결과를 11등 위치에 저장
     cols=['점수', '시간값']
@@ -113,7 +113,7 @@ if __name__ == '__main__':
     while True:
         try:
             if player_say == givechosung()[0]:
-                setplayer(name).setScore(1)
+                setplayer(name).setscore(1)
             else: print(givechosung()[1])
         except Exception as e:
             print(e)
