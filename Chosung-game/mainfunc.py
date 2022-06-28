@@ -5,7 +5,7 @@ import openpyxl
 import random
 
 
-DIR_WORD_PATH='../dic/word/'
+DIR_WORD_PATH='../word/'
 DIRC_EXCEL='./rank.xlsx'
 
 
