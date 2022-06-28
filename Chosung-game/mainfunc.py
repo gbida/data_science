@@ -57,6 +57,29 @@ def save_result(player):
                            '시간값':{0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}})
         filename='rank.xlsx'
         df.to_excel(filename)
+        # 만든 빈 양식에 플레이 데이터 기록
+        data=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0)  # 랭킹 엑셀 읽기
+        player=player.replace(' ', '')  # 공백 제거
+        playtime = end - start
+        rank_time=time.localtime()  # 현재 시간 저장
+        data.loc[11]=[player, round(playtime, 2), time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
+        # 새로운 게임 결과를 11등 위치에 저장
+
+        cols=['기록', '시간값']
+        tups=data[cols].sort_values(by=cols, ascending=(True, False)).apply(tuple, axis=1)
+        # 기록이 낮을수록, 기록이 같다면 시간값이 클수록 순위가 높게
+
+        # 기록, 시간값 2가지 기준에 따라 정렬
+        f, i=pd.factorize(tups)
+        factorized=pd.Series(f+1, tups.index)
+
+        # 새로운 순위를 'rank'행에 저장
+        data['rank'] = factorized
+        data = data.sort_values(by=['rank'])  # 'rank'에 따라 정렬
+        data.index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]  # 다시 1~10위 부여하기
+        data = data.drop('rank', axis=1)  # 'rank'행 삭제
+        data = data.drop(11)  # 11위 삭제
+        data.to_excel(DIRC_EXCEL)  # rank.xlsx에 덮어쓰기
     else:
         data=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0)  # 랭킹 엑셀 읽기
         player=player.replace(' ', '')  # 공백 제거
