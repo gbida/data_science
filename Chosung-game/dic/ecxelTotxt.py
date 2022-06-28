@@ -20,7 +20,7 @@ def ETT(excel):
     txt = col.iloc[:, :1]
     txt.to_csv(DIR_WORD + 'ETT/' + excel[:-5] + '.txt', index=0)
 
-# 한글 제외한 모든 문자 제거
+# 2글자인 한글단어 제외한 모든 문자 제거
 def clean_txt(txt_file):
     if not os.path.exists(DIR_WORD + 'clean_txt'): os.mkdir(DIR_WORD + 'clean_txt')
     with open(DIR_WORD + 'ETT/' + txt_file, mode='r', encoding='utf-8') as txt:
@@ -28,26 +28,14 @@ def clean_txt(txt_file):
             while True:
                 word = txt.readline()
                 word = re.sub('[^가-힣]', '', word)
-                txt2.write(word + '\n')
-                if not word: break
-
-# 2글자 아닌 단어 제거
-def wordTwo(txt_file):
-    if not os.path.exists(DIR_WORD + 'wordTwo'): os.mkdir(DIR_WORD + 'wordTwo')
-    with open(DIR_WORD + 'clean_txt/' + txt_file, mode='r', encoding='utf-8') as txt:
-        with open(DIR_WORD + 'wordTwo/' + txt_file, mode='w', encoding='utf-8') as txt2:
-            while True:
-                word = txt.readline()
-                if len(word) == 3:
-                    txt2.write(word)
-                elif not word:
-                    break
-                else:
-                    pass
+                if len(word)==2:
+                    txt2.write(word + '\n')
+                elif not word: break
+                    
 # 중복제거
 def set_txt(txt_file):
     if not os.path.exists(DIR_WORD + 'set_txt'): os.mkdir(DIR_WORD + 'set_txt')
-    with open(DIR_WORD + 'wordTwo/' + txt_file, mode='r', encoding='utf-8') as txt:
+    with open(DIR_WORD + 'clean_txt/' + txt_file, mode='r', encoding='utf-8') as txt:
         with open(DIR_WORD + 'set_txt/' + txt_file, mode='w', encoding='utf-8') as txt2:
             txtList = list(set(txt.readlines()))
             txtList.sort()
@@ -68,19 +56,13 @@ def chosung_txt(txt_file):
                 with open(DIR_WORD + chosung1 + '.txt', mode='a', encoding='utf-8') as txt2:
                     txt2.write(word + '\n')
 
-# 폴더 내 파일 개수 반환
-def count_file(dir_path):
-    dir_count = os.listdir(dir_path)
-    return len(dir_count)
-
 # 기능 구현
-if count_file(DIR_WORD) != 351:
-    excelList = os.listdir(ori)
+if len(os.listdir(DIR_WORD)) != 351:
+    excelList = os.listdir('./dic/')
     for i in tqdm.tqdm(excelList, desc='Loading... ', ncols=80,unit='단어'):
         ETT(i)
         i = i[:-5] + '.txt'
         clean_txt(i)
-        wordTwo(i)
         set_txt(i)
         chosung_txt(i)
 
