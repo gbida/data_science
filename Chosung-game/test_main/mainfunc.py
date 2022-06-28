@@ -104,8 +104,8 @@ def save_result(player):
 
 
 if __name__ == '__main__':
+    a = setplayer('user01')
     while True:
-        a = setplayer('user01')
         print(givechosung()[:2])
         player_say = input('대답')
         try:
