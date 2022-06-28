@@ -66,13 +66,13 @@ if len(os.listdir(DIR_WORD_PATH))!=351:
         set_txt(i)
         chosung_txt(i)
 
-    # # 필요없는 파일,폴더 삭제
-    # reList = os.listdir(DIR_WORD_PATH)
-    # dirlist = []
-    # for i in reList:
-    #     if not '.txt' in i:
-    #         dirlist+=[i]
-    # for i in dirlist:
-    #     for j in os.listdir(DIR_WORD_PATH+i):
-    #         os.remove(DIR_WORD_PATH+i+'/'+j)
-    #     os.rmdir(DIR_WORD_PATH+i)
+    # 필요없는 파일,폴더 삭제
+    reList = os.listdir(DIR_WORD_PATH)
+    dirlist = []
+    for i in reList:
+        if not '.txt' in i:
+            dirlist+=[i]
+    for i in dirlist:
+        for j in os.listdir(DIR_WORD_PATH+i):
+            os.remove(DIR_WORD_PATH+i+'/'+j)
+        os.rmdir(DIR_WORD_PATH+i)
