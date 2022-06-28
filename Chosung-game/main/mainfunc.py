@@ -5,23 +5,24 @@ import openpyxl
 import random
 
 
-DIR_WORD_PATH='../dic/word/'
-DIRC_EXCEL='./rank.xlsx'
+DIR_WORD_PATH = '../dic/word/'
+DIRC_EXCEL = './rank.xlsx'
 
 
 # 플레이어 정답 저장
 answerlist=[]
-
+selectfile=''
 
 # 플레이어한테 초성 제시
 def givechosung():
     """Return txt file name as a string"""
-    randomfile=random.choice(os.listdir(DIR_WORD_PATH))
-    return randomfile
+    global selectfile
+    selectfile=random.choice(os.listdir(DIR_WORD_PATH))
+    return selectfile
 
 
 # 저장된 정답 리스트에 있는 단어인지 확인
-def isduplicate():
+def isduplicate(player_say):
     """Return True if player's answer is not it answerlist, otherwise False"""
     if not answerlist:
         return iscorrect(player_say)
@@ -34,11 +35,11 @@ def isduplicate():
 
 # 플레이어가 입력한 단어가 사전파일에 있는 단어인지 확인
 def iscorrect(player_say):
-    with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
+    with open(DIR_WORD_PATH+selectfile, encoding='utf-8') as f:
         if player_say in f.read():
             answerlist.append(player_say)
             return True
-        else: False
+        else: return False
 
 
 # 랭킹 확인
@@ -78,4 +79,3 @@ def save_result(player):
         data = data.drop('rank', axis=1)  # 'rank'행 삭제
         data = data.drop(11)  # 11위 삭제
         data.to_excel(DIRC_EXCEL)  # rank.xlsx에 덮어쓰기
-
