@@ -57,15 +57,9 @@ def getchosung(word):
 
 # 플레이어한테 초성 제시
 def givechosung():
-    """Return two letters word and its chosung as a tuple """
-    pickword = []  # 'ㄷㅇ.txt'
-    randomfile = random.choice(os.listdir(DIR_WORD_PATH))
-    with open(randomfile, encoding='utf-8') as f:
-        for line in f.readlines():
-            pickword.append(line.replace('\n', ''))
-    correct = random.choice(pickword)  # '단어'
-    correct_chs = getchosung(correct)  # 'ㄷㅇ'
-    return correct, correct_chs
+    """Return two letters chosung as a string"""
+    randomfile = random.choice(os.listdir(DIR_WORD_PATH))  # ㄷㅇ.txt
+    return randomfile
 
 # 랭킹 확인
 def highscore():
@@ -110,17 +104,14 @@ def save_result(player):
 
 
 if __name__ == '__main__':
-    name = input('create a player name')
-    setplayer(name)
-
-    print(givechosung()[1])
-    player_say = input('say answer')
-
     while True:
+        a = setplayer('user01')
+        print(givechosung()[:2])
+        player_say = '단어'
         try:
-            if player_say == givechosung()[0]:
-                setplayer(name).setscore(1)
-            else: print(givechosung()[1])
+            if player_say in givechosung():
+                a.setscore(1)
+            else: print(givechosung()[:2])
         except Exception as e:
             print(e)
             break
