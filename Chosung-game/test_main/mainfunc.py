@@ -8,58 +8,24 @@ import random
 DIR_WORD_PATH = '../dic/word/'
 DIRC_EXCEL = './rank.xlsx'
 
-player1 = None
-player2 = None
+count = 1
+answerlist = []
 
-
-# 플레이어 데이터 저장
-class player:
-    def __init__(self, name, score=0):
-        self.name = name
-        self.score = score
-
-    # set instance values of player
-    def setname(self, name):
-        self.name = name
-        return self.name
-
-    def setscore(self, score):
-        self.score += score
-        return self.score
-
-    # get instance values of player
-    def getname(self):
-        return self.name
-
-    def getscore(self):
-        return self.score
-
-# 플레이어 생성
-def setplayer(name):
-    """Return player1 as a player class type object if new,
-     otherwise player2 as a same object for existing users"""
-    global player1, player2
-    if player1 is None:
-        player1 = player(name)
-        return player1
-    else:
-        player2 = player(name)
-        return player2
-
-# 랜덤 단어에서 초성 분리
-def getchosung(word):
-    """Return chosung as a string from a two letters word"""
-    if isinstance(word, str):
-        chosung = ''
-        for w in word:
-            chosung += chr(((ord(w) - 44032) // 588) + 4352)
-        return chosung
 
 # 플레이어한테 초성 제시
-def givechosung():
+def givechosung() -> str:
     """Return two letters chosung as a string"""
     randomfile = random.choice(os.listdir(DIR_WORD_PATH))  # ㄷㅇ.txt
     return randomfile
+
+# 정답을 맞춘 단어 필터링
+def isduplicate(player_say: str) -> bool:
+    """Return True if player's answer is not it answerlist, otherwise False"""
+    if not answerlist: return True
+    else:
+        for answer in answerlist:
+            if player_say is not answer: return True
+            else: return False
 
 # 랭킹 확인
 def highscore():
@@ -104,20 +70,23 @@ def save_result(player):
 
 
 if __name__ == '__main__':
-    a = setplayer('user01')
-    while True:
-        print(givechosung()[:2])
-        player_say = input('대답')
-        try:
-            with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
-                if player_say+'\n' in f.readlines():
-                    a.setscore(1)
-                    print('정답')
-                    print(a.getscore())
-                else:
-                    print('오답')
-                    print(a.getscore())
-                    break
-        except Exception as e:
-            print(e)
-            break
+
+    try:
+        while True:
+            # 초성 제시
+            print(givechosung()[:2])
+            # 플레이어 정답 입력
+            player_say = (input('정답은?').replace(' ', ''))
+            # 정답을 맞춘 단어 필터링
+            if isduplicate(player_say):
+                # 플레이어 입력 단어가 단어 파일에 있으면 count+1, answerlist에 정답 추가
+                with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
+                    if player_say+'\n' in f.readlines():
+                        count += 1
+                        answerlist.append(player_say)
+                        print('정답')
+                    else:
+                        print('오답')
+                        break
+    except Exception as e:
+        print(e)
