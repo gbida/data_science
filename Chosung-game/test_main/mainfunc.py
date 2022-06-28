@@ -46,22 +46,20 @@ def save_result(player):
     else:
         data=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0)  # 랭킹 엑셀 읽기
         player=player.replace(' ', '')  # 공백 제거
-        score  = round(playtime, 2) # 소수 두 번째 자리까지 반올림해서 표기
+        score  = round(end_time - start_time, 2) # 소수 두 번째 자리까지 반올림해서 표기
 
         rank_time=time.localtime()  # 현재 시간 저장
         data.loc[11]=[player, score, time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
-        print(data)
-
         # 새로운 게임 결과를 11등 위치에 저장
+        
         cols=['기록', '시간값']
         tups=data[cols].sort_values(by=cols, ascending=(True, False)).apply(tuple, axis=1)
 
         # 기록, 시간값 2가지 기준에 따라 정렬
         f, i=pd.factorize(tups)
         factorized=pd.Series(f+1, tups.index)
-
-        # 새로운 순위를 'rank'행에 저장
-        data['rank']=factorized
+        
+        data['rank']=factorized    # 새로운 순위를 'rank'행에 저장
         data=data.sort_values(by=['rank'])  # 'rank'에 따라 정렬
         data.index=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]  # 다시 1~10위 부여하기
         data=data.drop('rank', axis=1)  # 'rank'행 삭제
