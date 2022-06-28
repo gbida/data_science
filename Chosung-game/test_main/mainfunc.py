@@ -5,13 +5,12 @@ import openpyxl
 import random
 
 
-DIR_WORD_PATH = '../word/'
+DIR_WORD_PATH='../dic/word/'
 DIRC_EXCEL='./rank.xlsx'
 
 
-count=0  # 정답 맞춘 개수
-limit=0  # 게임 스테이지 5회전 제한
-answerlist=[]  # 플레이어 정답 저장
+# 플레이어 정답 저장
+answerlist=[]
 
 
 # 플레이어한테 초성 제시
@@ -82,6 +81,7 @@ def save_result(player):
 
 
 # if __name__ == '__main__':
+#     # game flow
 #     name=input('player name ')
 #     while limit < 5:
 #         print(givechosung()[:2])
