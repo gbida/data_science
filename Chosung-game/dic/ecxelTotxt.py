@@ -54,7 +54,7 @@ def set_txt(txt_file):
             for i in txtList: txt2.write(i)
 
 # 초성 판별 후 ㄱㄱ~ㅎㅎ.txt에 각각 저장
-def chosung(txt_file):
+def chosung_txt(txt_file):
     chosungList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
     with open(DIR_WORD + 'set_txt/' + txt_file, mode='r', encoding='utf-8') as txt:
         while True:
@@ -82,7 +82,7 @@ if count_file(DIR_WORD) != 351:
         clean_txt(i)
         wordTwo(i)
         set_txt(i)
-        chosung(i)
+        chosung_txt(i)
 
     # 필요없는 파일,폴더 삭제
     reList = os.listdir(DIR_WORD)
