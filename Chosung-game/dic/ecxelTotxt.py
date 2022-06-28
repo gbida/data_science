@@ -5,15 +5,15 @@ import re
 import tqdm
 
 # 폴더
-DIR_WORD_PATH = '../dic/word/'   # 최종 txt 파일 저장 폴더
+DIR_WORD_PATH = '../word/'   # 최종 txt 파일 저장 폴더
 if not os.path.exists(DIR_WORD_PATH): os.mkdir(DIR_WORD_PATH)
 
 # 함수 정의
 
 # 엑셀 처리후 txt로 변환
 def ETT(excel):
-    if not os.path.exists(DIR_WORD_PATH+ 'ETT/'): os.mkdir(DIR_WORD_PATH+ 'ETT/')
-    data = pandas.read_excel('../dic/'+ excel)                                       # 표준국어대사전 엑셀파일 경로
+    if not os.path.exists(DIR_WORD_PATH+'ETT/'): os.mkdir(DIR_WORD_PATH+'ETT/')
+    data = pandas.read_excel('../dic/'+excel)                                       # 표준국어대사전 엑셀파일 경로
     row = data.iloc[:, :3]
     col = row[((row['구성 단위'] == '단어') & (row['고유어 여부'] == '고유어')) | ((row['구성 단위'] == '단어') & (row['고유어 여부'] == '한자어'))]
     col = col.rename(columns={'어휘': '가'})
@@ -66,13 +66,13 @@ if len(os.listdir(DIR_WORD_PATH))!=351:
         set_txt(i)
         chosung_txt(i)
 
-    # 필요없는 파일,폴더 삭제
-    reList = os.listdir(DIR_WORD_PATH)
-    dirlist = []
-    for i in reList:
-        if not '.txt' in i:
-            dirlist+=[i]
-    for i in dirlist:
-        for j in os.listdir(DIR_WORD_PATH+i):
-            os.remove(DIR_WORD_PATH+i+'/'+j)
-        os.rmdir(DIR_WORD_PATH+i)
+    # # 필요없는 파일,폴더 삭제
+    # reList = os.listdir(DIR_WORD_PATH)
+    # dirlist = []
+    # for i in reList:
+    #     if not '.txt' in i:
+    #         dirlist+=[i]
+    # for i in dirlist:
+    #     for j in os.listdir(DIR_WORD_PATH+i):
+    #         os.remove(DIR_WORD_PATH+i+'/'+j)
+    #     os.rmdir(DIR_WORD_PATH+i)
