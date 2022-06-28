@@ -1,53 +1,45 @@
 import time
 import pandas as pd
 import os
-import openpyxl
 import random
-
+import openpyxl
 
 DIR_WORD_PATH = '../dic/word/'
 DIRC_EXCEL = './rank.xlsx'
 
+answerlist=[]  # 플레이어 정답 저장
+select=''  # 초성 파일
 
-# 플레이어 정답 저장
-answerlist=[]
-selectfile=''
-
-# 플레이어한테 초성 제시
+# 초성 제시
 def givechosung():
-    """Return txt file name as a string"""
-    global selectfile
-    selectfile=random.choice(os.listdir(DIR_WORD_PATH))
-    return selectfile
+    global select
+    select=random.choice(os.listdir(DIR_WORD_PATH))
+    return select
 
-
-# 저장된 정답 리스트에 있는 단어인지 확인
-def isduplicate(player_say):
-    """Return True if player's answer is not it answerlist, otherwise False"""
-    if not answerlist:
-        return iscorrect(player_say)
-    else:
-        if iscorrect(player_say):
-            for answer in answerlist:
-                if player_say is not answer: return True
-            else: return False
-
-
-# 플레이어가 입력한 단어가 사전파일에 있는 단어인지 확인
+# 플레이어 입력값이 select에 있는 단어인지 확인
 def iscorrect(player_say):
-    with open(DIR_WORD_PATH+selectfile, encoding='utf-8') as f:
+    with open(DIR_WORD_PATH+select, encoding='utf-8') as f:
         if player_say in f.read():
             answerlist.append(player_say)
             return True
         else: return False
 
+# 2번째 입력부터 저장된 정답 리스트에 있는 단어인지 확인
+def isduplicate(player_say):
+    if not answerlist:
+        return iscorrect(player_say)
+    else:
+        if iscorrect(player_say):
+            for answer in answerlist:
+                if player_say is not answer:
+                    return True
+            else: return False
 
 # 랭킹 확인
 def highscore():
     # rank.xlsx 열기, 시간
     highscore=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0, usecols=[0, 1, 2, 3])
     return highscore.loc[1:10]  # 10등까지만 보여주기
-
 
 # 게임 결과 저장
 def save_result(player):
