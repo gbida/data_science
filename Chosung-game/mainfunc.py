@@ -1,52 +1,45 @@
 import time
 import pandas as pd
 import os
-import openpyxl
 import random
+import openpyxl
 
+DIR_WORD_PATH = '../dic/word/'
+DIRC_EXCEL = './rank.xlsx'
 
-DIR_WORD_PATH='../word/'
-DIRC_EXCEL='./rank.xlsx'
+answerlist=[]  # 플레이어 정답 저장
+select=''  # 초성 파일
 
-
-# 플레이어 정답 저장
-answerlist=[]
-
-
-# 플레이어한테 초성 제시
+# 초성 제시
 def givechosung():
-    """Return txt file name as a string"""
-    randomfile=random.choice(os.listdir(DIR_WORD_PATH))
-    return randomfile
+    global select
+    select=random.choice(os.listdir(DIR_WORD_PATH))
+    return select
 
+# 플레이어 입력값이 select에 있는 단어인지 확인
+def iscorrect(player_say):
+    with open(DIR_WORD_PATH+select, encoding='utf-8') as f:
+        if player_say in f.read():
+            answerlist.append(player_say)
+            return True
+        else: return False
 
-# 저장된 정답 리스트에 있는 단어인지 확인
-def isduplicate():
-    """Return True if player's answer is not it answerlist, otherwise False"""
+# 2번째 입력부터 저장된 정답 리스트에 있는 단어인지 확인
+def isduplicate(player_say):
     if not answerlist:
         return iscorrect(player_say)
     else:
         if iscorrect(player_say):
             for answer in answerlist:
-                if player_say is not answer: return True
+                if player_say is not answer:
+                    return True
             else: return False
-
-
-# 플레이어가 입력한 단어가 사전파일에 있는 단어인지 확인
-def iscorrect(player_say):
-    with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
-        if player_say in f.read():
-            answerlist.append(player_say)
-            return True
-        else: False
-
 
 # 랭킹 확인
 def highscore():
     # rank.xlsx 열기, 시간
     highscore=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0, usecols=[0, 1, 2, 3])
     return highscore.loc[1:10]  # 10등까지만 보여주기
-
 
 # 게임 결과 저장
 def save_result(player):
@@ -103,22 +96,3 @@ def save_result(player):
         data = data.drop('rank', axis=1)  # 'rank'행 삭제
         data = data.drop(11)  # 11위 삭제
         data.to_excel(DIRC_EXCEL)  # rank.xlsx에 덮어쓰기
-
-
-# if __name__ == '__main__':
-#     # game flow
-#     name=input('player name ')
-#     while limit < 5:
-#         print(givechosung()[:2])
-#         player_say=(input('정답은? ').replace(' ', ''))
-#         if isduplicate(player_say):
-#             with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
-#                 if player_say in f.read():
-#                     count+=1
-#                     limit+=1
-#                     answerlist.append(player_say)
-#                     print('정답')
-#                 else:
-#                     print('오답')
-#                     break
-#     save_result(name)
