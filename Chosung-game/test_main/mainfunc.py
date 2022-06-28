@@ -57,15 +57,9 @@ def getchosung(word):
 
 # 플레이어한테 초성 제시
 def givechosung():
-    """Return two letters word and its chosung as a tuple """
-    pickword = []  # 'ㄷㅇ.txt'
-    randomfile = random.choice(os.listdir(DIR_WORD_PATH))
-    with open(randomfile, encoding='utf-8') as f:
-        for line in f.readlines():
-            pickword.append(line.replace('\n', ''))
-    correct = random.choice(pickword)  # '단어'
-    correct_chs = getchosung(correct)  # 'ㄷㅇ'
-    return correct, correct_chs
+    """Return two letters chosung as a string"""
+    randomfile = random.choice(os.listdir(DIR_WORD_PATH))  # ㄷㅇ.txt
+    return randomfile
 
 # 랭킹 확인
 def highscore():
@@ -88,7 +82,7 @@ def save_result(player):
         data=pd.read_excel(DIRC_EXCEL, engine='openpyxl', index_col=0)  # 랭킹 엑셀 읽기
         player=player.replace(' ', '')  # 공백 제거
         rank_time=time.localtime()  # 현재 시간 저장
-        data.loc[11]=[player, setplayer(name).getscore(), time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
+        data.loc[11]=[player, player.getscore(), time.strftime("%y/%m/%d %H:%M:%S", rank_time), f'{time.time():.2f}']
         print(data)
 
         # 새로운 게임 결과를 11등 위치에 저장
@@ -110,17 +104,20 @@ def save_result(player):
 
 
 if __name__ == '__main__':
-    name = input('create a player name')
-    setplayer(name)
-
-    print(givechosung()[1])
-    player_say = input('say answer')
-
     while True:
+        a = setplayer('user01')
+        print(givechosung()[:2])
+        player_say = input('대답')
         try:
-            if player_say == givechosung()[0]:
-                setplayer(name).setscore(1)
-            else: print(givechosung()[1])
+            with open(DIR_WORD_PATH+givechosung(), encoding='utf-8') as f:
+                if player_say+'\n' in f.readlines():
+                    a.setscore(1)
+                    print('정답')
+                    print(a.getscore())
+                else:
+                    print('오답')
+                    print(a.getscore())
+                    break
         except Exception as e:
             print(e)
             break
