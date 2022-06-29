@@ -20,25 +20,19 @@ start = 0
 
 DIR_WORD_PATH = r'../word'
 # 처음 실행시 사전파일 텍스트파일로 변환
-if len(os.listdir(DIR_WORD_PATH))!=351:
+if len(os.listdir(DIR_WORD_PATH))!=191:
     excelList = os.listdir('../dic/')
-    for i in tqdm.tqdm(excelList, desc='Loading... ', ncols=80,unit='단어'):
+    for i in tqdm.tqdm(excelList, desc='Loading... ', ncols=80, unit='단어'):
         ecxelTotxt.ETT(i)
         i = i[:-5] + '.txt'
         ecxelTotxt.clean_txt(i)
         ecxelTotxt.set_txt(i)
         ecxelTotxt.chosung_txt(i)
 
-    # 필요없는 파일,폴더 삭제
-    reList = os.listdir(DIR_WORD_PATH)
-    dirlist = []
-    for i in reList:
-        if not '.txt' in i:
-            dirlist+=[i]
-    for i in dirlist:
-        for j in os.listdir(DIR_WORD_PATH+i):
-            os.remove(DIR_WORD_PATH+i+'/'+j)
-        os.rmdir(DIR_WORD_PATH+i)
+
+    ecxelTotxt.refile(DIR_WORD_PATH)
+    ecxelTotxt.redouble(DIR_WORD_PATH)
+
 
 # class로 chosungApp 기본 프레임 묶어주기
 class chosungApp(Tk):
@@ -157,7 +151,7 @@ class chosungApp(Tk):
                 i += 1
                 curr_progress.set(i)
                 progress_bar.update()
-                if i == 1:
+                if i == 5:
                     global end
                     tkinter.messagebox.showwarning('', 'GAME CLEAR   축하합니다!')
                     end = time.time()
