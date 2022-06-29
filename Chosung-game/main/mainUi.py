@@ -1,3 +1,4 @@
+import time
 import tkinter
 import tkinter.font
 import tkinter.messagebox
@@ -7,8 +8,38 @@ from tkinter import simpledialog
 import pandas
 import time as t
 import mainfunc
+import ecxelTotxt
+import tqdm
+import os
 
 i = 0
+chosung = ''
+name = ''
+end = 0
+start = 0
+
+DIR_WORD_PATH = r'../word'
+# 처음 실행시 사전파일 텍스트파일로 변환
+if len(os.listdir(DIR_WORD_PATH))!=351:
+    excelList = os.listdir('../dic/')
+    for i in tqdm.tqdm(excelList, desc='Loading... ', ncols=80,unit='단어'):
+        ecxelTotxt.ETT(i)
+        i = i[:-5] + '.txt'
+        ecxelTotxt.clean_txt(i)
+        ecxelTotxt.set_txt(i)
+        ecxelTotxt.chosung_txt(i)
+
+    # 필요없는 파일,폴더 삭제
+    reList = os.listdir(DIR_WORD_PATH)
+    dirlist = []
+    for i in reList:
+        if not '.txt' in i:
+            dirlist+=[i]
+    for i in dirlist:
+        for j in os.listdir(DIR_WORD_PATH+i):
+            os.remove(DIR_WORD_PATH+i+'/'+j)
+        os.rmdir(DIR_WORD_PATH+i)
+
 # class로 chosungApp 기본 프레임 묶어주기
 class chosungApp(Tk):
     def __init__(w):
@@ -55,7 +86,7 @@ class chosungApp(Tk):
         listbox2 = Listbox(w.working_frame, width=14, height=11, font=font)
         listbox2.place(x=95, y=110)
         listbox3 = Listbox(w.working_frame, width=7, height=11, font=font)
-        listbox3.place(x=260, y=110)
+        listbox3.place(x=240, y=110)
         listbox4 = Listbox(w.working_frame, width=13, height=11, font=font)
         listbox4.place(x=310, y=110)
         with open(r'./rank.txt', mode='r', encoding='utf-8') as rank_txt:
@@ -64,9 +95,9 @@ class chosungApp(Tk):
                     txt = str(rank_txt.readlines(i))
                     txt = txt.split(',')
                     listbox1.insert(i, '  순위')
-                    listbox2.insert(i, '         ' + txt[1])
-                    listbox3.insert(i, ' ' + txt[2])
-                    listbox4.insert(i, '        ' + txt[3][:2])
+                    listbox2.insert(i, '       ' +'닉네임')
+                    listbox3.insert(i, ' ' + ' 시간')
+                    listbox4.insert(i, '        ' + '기록시간')
                 txt = str(rank_txt.readlines(i))
                 txt = txt.split(',')
                 time = txt[3].split('/')[1] + '/' + txt[3].split('/')[2][:8]
@@ -87,6 +118,7 @@ class chosungApp(Tk):
             # 닉네임 입력받는 부분, name으로 저장된다.
             a = 0
             while a == 0:
+                global name
                 name = tkinter.simpledialog.askstring('닉네임 입력', '')
                 if name != '':
                     a = 1
@@ -94,8 +126,10 @@ class chosungApp(Tk):
                     tkinter.messagebox.showwarning('', '닉네임을 입력하세요')
                     a = 0
             # 시작시간 수정
-            time = '시작시간 : ' + t.strftime('%H:%M:%S') + '(시:분:초)'
-            start_time = Label(w.working_frame, text=time, font=font, width=25)
+            global start
+            start = time.time()
+            time2 = '시작시간 : ' + t.strftime('%H:%M:%S') + '(시:분:초)'
+            start_time = Label(w.working_frame, text=time2, font=font, width=25)
             start_time.place(x=65, y=35)
             chosung_display()
             # 시작시간 표시 후 곧바로 게임 시작
@@ -104,6 +138,7 @@ class chosungApp(Tk):
         # 초성제시
 
         def chosung_display():
+            global chosung
             chosung = mainfunc.givechosung()
             chosung1 = chosung[:1]
             chosung2 = chosung[1:2]
@@ -116,14 +151,17 @@ class chosungApp(Tk):
         def chosung_input2(event):
             result = chosung_input.get()
             chosung_input.delete(0, "end")
-            if mainfunc.iscorrect(result) == True:
+            if mainfunc.iscorrect(result, chosung) == True:
                 chosung_display()
                 global i
                 i += 1
                 curr_progress.set(i)
                 progress_bar.update()
-                if i == 5:
+                if i == 1:
+                    global end
                     tkinter.messagebox.showwarning('', 'GAME CLEAR   축하합니다!')
+                    end = time.time()
+                    mainfunc.save_result(name, end, start)
                     i = 0
                     curr_progress.set(i)
                     progress_bar.update()
