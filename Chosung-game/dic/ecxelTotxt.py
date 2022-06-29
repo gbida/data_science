@@ -56,8 +56,32 @@ def chosung_txt(txt_file):
                 with open(DIR_WORD_PATH+chosung1+'.txt',mode='a',encoding='utf-8') as txt2:
                     txt2.write(word + '\n')
 
-# 기능 구현
-if len(os.listdir(DIR_WORD_PATH))!=351:
+ # 필요없는 파일,폴더 삭제
+def refile(dir_path):
+    reList = os.listdir(dir_path)
+    dirlist = []
+    for i in reList:
+        if not '.txt' in i:
+            dirlist += [i]
+    for i in dirlist:
+        for j in os.listdir(DIR_WORD_PATH + i):
+            os.remove(DIR_WORD_PATH + i + '/' + j)
+        os.rmdir(DIR_WORD_PATH + i)
+
+# 쌍자음 파일 제거
+def redouble(dir_path):
+    reList = os.listdir(dir_path)
+    double=['ㄲ','ㄸ','ㅃ','ㅆ','ㅉ']
+    for i in reList:
+        for j in double:
+            if j in i:
+                if os.path.isfile(DIR_WORD_PATH+i):
+                    os.remove(DIR_WORD_PATH+i)
+
+# 기능구현
+
+# 처음 실행시 사전파일 텍스트파일로 변환
+if len(os.listdir(DIR_WORD_PATH))!=191:
     excelList = os.listdir('../dic/')
     for i in tqdm.tqdm(excelList, desc='Loading... ', ncols=80,unit='단어'):
         ETT(i)
@@ -66,13 +90,6 @@ if len(os.listdir(DIR_WORD_PATH))!=351:
         set_txt(i)
         chosung_txt(i)
 
-    # 필요없는 파일,폴더 삭제
-    reList = os.listdir(DIR_WORD_PATH)
-    dirlist = []
-    for i in reList:
-        if not '.txt' in i:
-            dirlist+=[i]
-    for i in dirlist:
-        for j in os.listdir(DIR_WORD_PATH+i):
-            os.remove(DIR_WORD_PATH+i+'/'+j)
-        os.rmdir(DIR_WORD_PATH+i)
+    # 필요없는 파일,폴더 삭제 / 쌍자음 삭제
+    refile(DIR_WORD_PATH)
+    redouble(DIR_WORD_PATH)
