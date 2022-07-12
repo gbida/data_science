@@ -1,5 +1,9 @@
-.idea/
-data/
-font/
-game/
-learn/
+./idea/*
+./data/daegu2020/*
+./data/통계분석결과예시.jpg
+./game/*
+./into/*
+./learn/.ipynb_checkpoints/*
+./learn/_*.*
+./learn/대구문화생활분석.ipynb
+./mintty.exe.stackdump
