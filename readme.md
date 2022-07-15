@@ -4,6 +4,6 @@ contents what I learned from data scientist class in Kyungbook University and ot
 
 ## structure
 
-- data: for analysis from public data or open data portal
-- font: for korean language encoding
+- data: public or open data portal for analysis
+- font: for encoding korean language
 - learn: files what I learned
