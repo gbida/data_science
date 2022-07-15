@@ -1,9 +1,10 @@
-# data science
+# data_science
 
 contents what I learned from data scientist class in Kyungbook University and others
 
 ## structure
 
-- data: public or open data portal for analysis
-- font: for encoding korean language
-- learn: files what I learned
+- Data: public or open data portal for analysis
+- Docs: pdf, txt files
+- Fonts: for encoding korean language
+- Learn: files what I learned
