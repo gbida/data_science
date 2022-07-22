@@ -36,4 +36,3 @@ def rmcomma(data):
 			if ',' in row[i]:
 				row[i] = row[i].replace(',', '')
 	return data
-
