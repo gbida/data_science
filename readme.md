@@ -4,7 +4,7 @@ contents what I learned from data scientist class in Kyungbook University and ot
 
 ## structure
 
-- Data: public or open data portal for analysis
-- Docs: pdf, txt files
-- Fonts: for encoding korean language
-- Learn: files what I learned
+- data: public or open data portal for analysis
+- doc: pdf, txt files
+- font: for encoding korean language
+- learn: files what I learned
