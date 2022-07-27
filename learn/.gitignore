@@ -1,2 +1,5 @@
 ./__pycache__/*
 ./.ipynb_checkpoints/*
+./webscraping/.ipynb_checkpoints/*
+./learn/.ipynb_checkpoints/*
+./learn/__pycache__/*
